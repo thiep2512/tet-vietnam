@@ -19,7 +19,7 @@
 }
 
 body {
-    background: white; 
+    background: white;
     overflow: hidden;
     font-family: 'Segoe UI', sans-serif;
     color: black;
@@ -31,20 +31,10 @@ canvas {
     inset: 0;
 }
 
-/* ================= CÂY ĐÀO ================= */
-#cay-dao {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    width: 180px; 
-    height: auto;
-    z-index: 5;
-    pointer-events: none; 
-}
 /* ================= UI ================= */
 #ui {
     position: fixed;
-    top: 30px;
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
@@ -52,50 +42,42 @@ canvas {
 }
 
 #title {
-    font-size: 36px;
+    font-size: 28px;
     color: var(--red);
-    text-shadow: 0 0 15px var(--gold);
+    text-shadow: 0 0 10px var(--gold);
 }
 
-#countdown {
-    margin-top: 10px;
-    font-size: 20px;
-}
-
-#year {
-    margin-top: 6px;
-    font-size: 16px;
-    color: var(--red);
-}
+#countdown { margin-top: 6px; font-size: 16px; }
+#year { margin-top: 4px; font-size: 14px; color: var(--red); }
 
 /* ================= CÂU ĐỐI ================= */
 .cau-doi {
     position: fixed;
-    top: 120px;
-    width: 60px;
-    height: 70%;
+    top: 100px;
+    width: 44px;
+    height: 65%;
     background: linear-gradient(#c30000, #900000);
     color: var(--gold);
-    font-size: 22px;
+    font-size: 16px;
     font-weight: bold;
     text-align: center;
-    padding: 15px 5px;
+    padding: 10px 4px;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255,0,0,0.4);
+    box-shadow: 0 0 15px rgba(255,0,0,0.4);
     z-index: 9;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
 }
 
-#doi-left { left: 20px; }
-#doi-right { right: 20px; }
+#doi-left { left: 6px; }
+#doi-right { right: 6px; }
 
 /* ================= LÌ XÌ ================= */
 .lixi {
     position: fixed;
-    width: 60px;
-    height: 80px;
+    width: 48px;
+    height: 64px;
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -116,7 +98,7 @@ canvas {
 
 @keyframes float {
     0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-8px); }
 }
 
 .popup {
@@ -131,40 +113,20 @@ canvas {
 
 .popup div {
     background: linear-gradient(135deg, red, darkred);
-    padding: 40px;
+    padding: 25px;
     border-radius: 20px;
     color: gold;
-    font-size: 24px;
+    font-size: 18px;
     text-align: center;
-    box-shadow: 0 0 30px gold;
+    box-shadow: 0 0 20px gold;
 }
-
-/* ================= MOBILE ================= */
-@media (max-width: 768px) {
-    #title { font-size: 24px; }
-    #countdown { font-size: 16px; }
-    #year { font-size: 14px; }
-    #ui { top: 20px; width: 90%; }
-
-    .cau-doi {
-        width: 44px;
-        font-size: 16px;
-        top: 90px;
-        padding: 10px 4px;
-    }
-    #doi-left { left: 6px; }
-    #doi-right { right: 6px; }
-
-    .lixi { width: 48px; height: 64px; font-size: 22px; }
-
-    .popup div { font-size: 18px; padding: 25px; width: 85%; }
-}
-
 </style>
 </head>
 <body>
 
 <canvas id="canvas"></canvas>
+
+<!-- CÂU ĐỐI -->
 <div class="cau-doi" id="doi-left">
     <div>Xuân</div>
     <div>Sang</div>
@@ -194,87 +156,85 @@ canvas {
 </div>
 
 <script>
-
 /* ================= CANVAS SETUP ================= */
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-function resize() {
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
-}
+function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
 resize();
 addEventListener("resize", resize);
 
-/* ================= UTIL ================= */
 const rand = (a,b)=>Math.random()*(b-a)+a;
 
 /* ================= FLOWER ================= */
 class Flower {
-    constructor(){
+    constructor(color){
         this.x = rand(0,canvas.width);
         this.y = rand(-canvas.height,0);
-        this.size = rand(4,8);
-        this.speed = rand(0.3,1);
+        this.size = rand(3,6);
+        this.speed = rand(1,2);
         this.angle = rand(0, Math.PI*2);
+        this.color = color; // pink hoặc vàng
     }
     update(){
-        this.x += Math.sin(this.angle) * 0.5; // đung đưa qua lại
+        this.x += Math.sin(this.angle) * 1;
         this.y += this.speed;
         this.angle += 0.02;
-        if(this.y > canvas.height + 20) this.y = -20;
+        if(this.y > canvas.height + 10) this.y = -10;
     }
     draw(){
         ctx.save();
         ctx.translate(this.x,this.y);
         ctx.rotate(this.angle);
-        ctx.fillStyle="pink";
+        ctx.fillStyle = this.color;
         for(let i=0;i<5;i++){
             ctx.rotate(Math.PI*2/5);
             ctx.beginPath();
-            ctx.ellipse(0,5,this.size,this.size/2,0,0,Math.PI*2);
+            ctx.ellipse(0,3,this.size,this.size/2,0,0,Math.PI*2);
             ctx.fill();
         }
         ctx.restore();
     }
 }
 
-const flowers = Array.from({length:150},()=>new Flower());
+// tạo hoa hồng và vàng
+const flowers = [];
+for(let i=0;i<50;i++) flowers.push(new Flower("pink"));
+for(let i=0;i<50;i++) flowers.push(new Flower("gold"));
 
-/* ================= FIREWORK ================= */
-class Particle {
-    constructor(x,y){
-        this.x=x; this.y=y;
-        let a=Math.random()*Math.PI*2;
-        let s=Math.random()*6+2;
-        this.vx=Math.cos(a)*s;
-        this.vy=Math.sin(a)*s;
-        this.life=100;
-        this.color=`hsl(${rand(0,360)},100%,60%)`;
-    }
-    update(){
-        this.vy+=0.05;
-        this.x+=this.vx;
-        this.y+=this.vy;
-        this.life--;
-    }
-    draw(){ ctx.fillStyle=this.color; ctx.fillRect(this.x,this.y,2,2);}
+/* ================= LÌ XÌ ================= */
+const lixiColors = ["red","yellow","green","blue","purple"];
+const lixiMessages = [
+    "Chúc bạn năm mới vui vẻ!",
+    "Phát tài phát lộc!",
+    "Sức khỏe dồi dào!",
+    "Vạn sự như ý!",
+    "Hạnh phúc tràn đầy!"
+];
+const lixiMoney = ["1k","2k","5k","10k","20k"];
+
+function spawnLixi(){
+    if(lixiColors.length===0) return;
+    const color = lixiColors.shift();
+    let d=document.createElement("div");
+    d.className="lixi "+color;
+    d.style.left=rand(30,innerWidth-70)+"px";
+    d.style.top=rand(100,innerHeight-150)+"px";
+    d.innerText="🧧";
+    d.onclick=()=>{
+        let show = Math.random()<0.5 ? lixiMessages[Math.floor(rand(0,lixiMessages.length))] : "Bạn nhận được "+lixiMoney[Math.floor(rand(0,lixiMoney.length))];
+        document.getElementById("popupText").innerText=`💰 LỘC XUÂN 💰\n${show}`;
+        document.getElementById("popup").style.display="flex";
+        d.remove();
+    };
+    document.body.appendChild(d);
 }
-
-let fireworks=[];
-setInterval(()=>{
-    let x=rand(100,canvas.width-100);
-    let y=rand(100,canvas.height/2);
-    for(let i=0;i<120;i++) fireworks.push(new Particle(x,y));
-},1200);
+for(let i=0;i<5;i++) setTimeout(spawnLixi,i*500);
 
 /* ================= LOOP ================= */
 function animate(){
-    ctx.fillStyle="rgba(255,255,255,0.2)";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
     flowers.forEach(f=>{f.update();f.draw();});
-    fireworks = fireworks.filter(p=>p.life>0);
-    fireworks.forEach(p=>{p.update();p.draw();});
     requestAnimationFrame(animate);
 }
 animate();
@@ -288,8 +248,7 @@ function countdown(){
     let h = Math.floor(d/3600000)%24;
     let m = Math.floor(d/60000)%60;
     let s = Math.floor(d/1000)%60;
-    document.getElementById("countdown").innerText=
-        `⏳ Còn ${days} ngày ${h}h ${m}m ${s}s`;
+    document.getElementById("countdown").innerText=`⏳ Còn ${days} ngày ${h}h ${m}m ${s}s`;
 }
 setInterval(countdown,1000);
 
@@ -298,45 +257,6 @@ const CAN=["Giáp","Ất","Bính","Đinh","Mậu","Kỷ","Canh","Tân","Nhâm","
 const CHI=["Tý","Sửu","Dần","Mão","Thìn","Tỵ","Ngọ","Mùi","Thân","Dậu","Tuất","Hợi"];
 let y=new Date().getFullYear();
 document.getElementById("year").innerText = `Năm ${CAN[(y+6)%10]} ${CHI[(y+8)%12]}`;
-
-/* ================= LÌ XÌ ================= */
-const lixiColors = ["red","yellow","green","blue","purple"];
-const lixiMessages = [
-    "Chúc bạn năm mới vui vẻ!",
-    "Phát tài phát lộc!",
-    "Sức khỏe dồi dào!",
-    "Vạn sự như ý!",
-    "Hạnh phúc tràn đầy!",
-    "Công việc thuận lợi!",
-    "May mắn cả năm!",
-    "An khang thịnh vượng!",
-    "Tết sum vầy!",
-    "Chúc lộc đầy nhà!"
-];
-const lixiMoney = ["1k","2k","5k","10k","20k","50k","100k","200k"];
-
-function spawnLixi(){
-    if(lixiColors.length===0) return;
-    const color = lixiColors.shift();
-    let d=document.createElement("div");
-    d.className="lixi "+color;
-    d.style.left=rand(80,innerWidth-140)+"px";
-    d.style.top=rand(120,innerHeight-200)+"px";
-    d.innerText="🧧";
-    d.onclick=()=>{
-        let show;
-        if(Math.random()<0.5){
-            show = lixiMessages[Math.floor(rand(0,lixiMessages.length))];
-        } else {
-            show = "Bạn nhận được "+lixiMoney[Math.floor(rand(0,lixiMoney.length))];
-        }
-        document.getElementById("popupText").innerText=`💰 LỘC XUÂN 💰\n${show}`;
-        document.getElementById("popup").style.display="flex";
-        d.remove();
-    };
-    document.body.appendChild(d);
-}
-for(let i=0;i<5;i++) setTimeout(spawnLixi,i*500);
 
 document.getElementById("popup").onclick=()=>{document.getElementById("popup").style.display="none";}
 </script>
