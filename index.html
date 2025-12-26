@@ -41,19 +41,6 @@ canvas {
     z-index: 5;
     pointer-events: none; 
 }
-
-/* ================= CÂY MAI ================= */
-#cay-mai {
-    position: fixed;
-    bottom: 0;
-    right: 30%;
-    transform: translateX(50%);
-    width: 400px; 
-    height: auto;
-    z-index: 1;
-    pointer-events: none;
-}
-
 /* ================= UI ================= */
 #ui {
     position: fixed;
@@ -178,15 +165,6 @@ canvas {
 <body>
 
 <canvas id="canvas"></canvas>
-
-
-<!-- CÂY ĐÀO -->
-<img src="an/dao.png" id="cay-dao" alt="Cây đào">
-
-<!-- CÂY MAI -->
-<img src="an/caymai.svg" id="cay-mai" alt="Cây mai">
-
-<!-- CÂU ĐỐI -->
 <div class="cau-doi" id="doi-left">
     <div>Xuân</div>
     <div>Sang</div>
@@ -216,7 +194,7 @@ canvas {
 </div>
 
 <script>
-  
+
 /* ================= CANVAS SETUP ================= */
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
