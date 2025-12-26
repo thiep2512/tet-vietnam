@@ -19,10 +19,11 @@
 }
 
 body {
-    background: radial-gradient(circle at bottom, #400000, #100000);
+    background: #ffffff; /* nền trắng */
     overflow: hidden;
     font-family: 'Segoe UI', sans-serif;
-    color: white;
+    color: black;
+    position: relative;
 }
 
 canvas {
@@ -42,19 +43,20 @@ canvas {
 
 #title {
     font-size: 36px;
-    color: var(--gold);
-    text-shadow: 0 0 15px red;
+    color: var(--red);
+    text-shadow: 0 0 15px var(--red);
 }
 
 #countdown {
     margin-top: 10px;
     font-size: 20px;
+    color: #000;
 }
 
 #year {
     margin-top: 6px;
     font-size: 16px;
-    color: #ffb;
+    color: #333;
 }
 
 /* ================= CÂU ĐỐI – CHỮ DỌC ================= */
@@ -63,26 +65,20 @@ canvas {
     top: 120px;
     width: 60px;
     height: 70%;
-    background: linear-gradient(#c40000, #7a0000);
-    color: var(--gold);
+    background: var(--red); /* nền đỏ */
+    color: #ffffff;          /* chữ trắng */
     font-size: 22px;
     font-weight: bold;
     text-align: center;
     padding: 15px 5px;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255,0,0,0.4);
+    border: 3px solid #ffcccc;
+    box-shadow: 0 0 15px rgba(195,0,0,0.7);
     z-index: 9;
 
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-}
-
-/* HIỆU ỨNG HIỆN TỪ TRÊN XUỐNG */
-.cau-doi span {
-    opacity: 0;
-    transform: translateY(-20px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 #doi-left { left: 20px; }
@@ -104,6 +100,7 @@ canvas {
     cursor: pointer;
     z-index: 20;
     animation: float 3s ease-in-out infinite;
+    touch-action: manipulation;
 }
 
 @keyframes float {
@@ -130,6 +127,27 @@ canvas {
     text-align: center;
     box-shadow: 0 0 30px gold;
 }
+
+/* ================= MOBILE OPTIMIZE ================= */
+@media (max-width: 768px) {
+    #title { font-size: 24px; }
+    #countdown { font-size: 16px; }
+    #year { font-size: 14px; }
+    #ui { top: 20px; width: 90%; }
+
+    .cau-doi {
+        width: 44px;
+        font-size: 16px;
+        top: 90px;
+        padding: 10px 4px;
+    }
+    #doi-left { left: 6px; }
+    #doi-right { right: 6px; }
+
+    .lixi { width: 48px; height: 64px; font-size: 22px; }
+
+    .popup div { font-size: 18px; padding: 25px; width: 85%; }
+}
 </style>
 </head>
 
@@ -138,21 +156,21 @@ canvas {
 
 <!-- CÂU ĐỐI CHỮ DỌC -->
 <div class="cau-doi" id="doi-left">
-    <span>Xuân</span>
-    <span>Sang</span>
-    <span>Phúc</span>
-    <span>Lộc</span>
-    <span>Đầy</span>
-    <span>Nhà</span>
+    <div>Xuân</div>
+    <div>Sang</div>
+    <div>Phúc</div>
+    <div>Lộc</div>
+    <div>Đầy</div>
+    <div>Nhà</div>
 </div>
 
 <div class="cau-doi" id="doi-right">
-    <span>Tết</span>
-    <span>Đến</span>
-    <span>Bình</span>
-    <span>An</span>
-    <span>Vạn</span>
-    <span>Sự</span>
+    <div>Tết</div>
+    <div>Đến</div>
+    <div>Bình</div>
+    <div>An</div>
+    <div>Vạn</div>
+    <div>Sự</div>
 </div>
 
 <!-- UI -->
@@ -217,7 +235,7 @@ class Flower {
         ctx.restore();
     }
 }
-const flowers = Array.from({length:200},()=>new Flower());
+const flowers = Array.from({length: innerWidth<768 ? 120 : 200}, ()=>new Flower());
 
 /* ================= FIREWORK ================= */
 class Particle {
@@ -253,7 +271,7 @@ setInterval(()=>{
 let time=0;
 function animate(){
     time++;
-    ctx.fillStyle="rgba(0,0,0,0.2)";
+    ctx.fillStyle="rgba(255,255,255,0.1)";
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
     flowers.forEach(f=>{f.update(time);f.draw();});
@@ -306,20 +324,6 @@ for(let i=0;i<3;i++) setTimeout(spawnLixi,i*1500);
 document.getElementById("popup").onclick=()=>{
     document.getElementById("popup").style.display="none";
 };
-
-/* ================= KÍCH HOẠT CÂU ĐỐI ================= */
-function animateCouplet(){
-    document.querySelectorAll('.cau-doi').forEach(c=>{
-        c.querySelectorAll('span').forEach((ch,i)=>{
-            setTimeout(()=>{
-                ch.style.opacity=1;
-                ch.style.transform='translateY(0)';
-            }, i*(300+Math.random()*200));
-        });
-    });
-}
-window.addEventListener("load", animateCouplet);
 </script>
 </body>
 </html>
-
